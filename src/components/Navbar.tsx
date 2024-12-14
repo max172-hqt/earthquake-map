@@ -1,9 +1,11 @@
+// import { useEarthquakeContext } from "../context/EarthquakeContext";
 import { useSidebarContext } from "../context/SidebarContext";
 import styles from "./Navbar.module.css";
 import { IconMenu2 } from "@tabler/icons-react";
 
 function Navbar() {
   const { setIsSidebarOpen } = useSidebarContext();
+  // const { isPending } = useEarthquakeContext()
 
   function toggleSidebar() {
     setIsSidebarOpen((prev) => !prev)

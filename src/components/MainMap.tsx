@@ -1,30 +1,19 @@
 import { Map, View } from "ol";
 import { OSM } from "ol/source";
 import TileLayer from "ol/layer/Tile";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "ol/ol.css";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
+import { useEarthquakeContext } from "../context/EarthquakeContext";
 
 const EARTHQUAKE_VECTOR_LAYER_Z_INDEX = 10;
 
 function MainMap() {
   const mapRef = useRef<Map | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [earthquakeData, setEarthquakeData] = useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(
-        "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
-      );
-      const data = await response.json();
-      setEarthquakeData(data);
-    }
-
-    fetchData();
-  }, []);
+  const { earthquakeData } = useEarthquakeContext()
 
   // Initialize the map
   useEffect(() => {
@@ -49,7 +38,7 @@ function MainMap() {
   }, []);
 
   useEffect(() => {
-    if (mapRef.current === null || earthquakeData === null) {
+    if (mapRef.current === null || !earthquakeData) {
       return;
     }
 

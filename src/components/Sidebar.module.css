@@ -5,6 +5,7 @@
   position: fixed;
   z-index: 999;
   transition: transform 200ms ease;
+  overflow: scroll;
 }
 
 .sidebarOpen {
