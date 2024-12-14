@@ -1,0 +1,11 @@
+.navbar {
+  background: white;
+  padding: 1rem 1rem;
+}
+
+.logo h1 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}

@@ -7,8 +7,9 @@ import "ol/ol.css";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
+import Layout from "./Layout";
 
-const EARTHQUAKE_VECTOR_LAYER_Z_INDEX = 10
+const EARTHQUAKE_VECTOR_LAYER_Z_INDEX = 10;
 
 function App() {
   const mapRef = useRef<Map | null>(null);
@@ -55,7 +56,9 @@ function App() {
     }
 
     const layers = mapRef.current.getLayers().getArray();
-    let earthquakeLayer = layers.find((layer) => layer.get("id") === "main") as VectorLayer;
+    let earthquakeLayer = layers.find(
+      (layer) => layer.get("id") === "main"
+    ) as VectorLayer;
 
     if (!earthquakeLayer) {
       earthquakeLayer = new VectorLayer({
@@ -68,8 +71,8 @@ function App() {
     const source = new VectorSource({
       features: new GeoJSON().readFeatures(earthquakeData, {
         // different projections between the data and the map view
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857'
+        dataProjection: "EPSG:4326",
+        featureProjection: "EPSG:3857",
       }),
     });
 
@@ -77,9 +80,9 @@ function App() {
   }, [earthquakeData]);
 
   return (
-    <main>
+    <Layout>
       <div id="map" ref={containerRef}></div>
-    </main>
+    </Layout>
   );
 }
 
