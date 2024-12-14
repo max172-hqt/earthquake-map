@@ -1,6 +1,13 @@
 .navbar {
   background: white;
   padding: 1rem 1rem;
+  border-bottom: 1px solid #F2F2F2;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .logo h1 {
