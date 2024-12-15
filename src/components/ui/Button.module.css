@@ -9,12 +9,27 @@
   color: white;
 }
 
+.button:hover {
+  cursor: pointer;
+}
+
 .button-default {
   height: 2rem;
   padding: 0.5rem 1rem;
   background-color: var(--primary-color);
 }
 
-.button:hover {
+.button-icon {
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--secondary-color);
+}
+
+.button-default:hover {
   background-color: var(--primary-color-lighten);
+}
+
+.button-icon:hover {
+  background-color: var(--secondary-color-darken);
 }

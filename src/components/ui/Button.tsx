@@ -5,21 +5,21 @@ import classNames from "classnames";
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
-  variant: "default";
-  size: "sm" | "default" | "lg";
+  variant?: "primary" | "secondary" | "icon";
+  size?: "sm" | "default" | "lg";
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", ...props }, ref) => {
     const buttonClasses = classNames(styles.button, className, 
       {
-        [styles[`button-${size}`]]: true,
+        [styles[`button-${size}`]]: variant !== 'icon',
         [styles[`button-${variant}`]]: true,
       }
     )
 
     return (
-      <button className={buttonClasses} ref={ref}>
+      <button className={buttonClasses} ref={ref} { ...props }>
         {props.children}
       </button>
     );

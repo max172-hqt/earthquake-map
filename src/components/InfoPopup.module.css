@@ -1,0 +1,52 @@
+.popup {
+  display: flex;
+  background: white;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 350px;
+  font-size: 0.875rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  color: white;
+  background: #22c55e;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.subheading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: #777;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.popup h2 {
+  font-size: 1rem;
+  margin: 0;
+  margin-bottom: -0.25rem;
+  padding: 0;
+}
+
+.popup p {
+  margin: 0;
+  padding: 0;
+}
+
+.popup span {
+  font-weight: 700;
+}

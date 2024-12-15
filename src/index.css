@@ -6,6 +6,9 @@
   --primary-color: rgba(0, 0, 0, 1);
   --primary-color-lighten: rgba(0, 0, 0, 0.8);
 
+  --secondary-color: rgba(255, 255, 255, 1);
+  --secondary-color-darken: #e5e7eb;
+
   /* color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
