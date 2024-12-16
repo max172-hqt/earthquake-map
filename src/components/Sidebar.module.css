@@ -1,11 +1,13 @@
 .sidebar {
   background: white;
   width: 360px;
-  height: 100%;
-  position: fixed;
+  position: absolute;
   z-index: 999;
   transition: transform 200ms ease;
-  overflow: scroll;
+  overflow-y: auto;
+  height: 100%;
+  top: 0;
+  padding-top: 70px;
 }
 
 .sidebarOpen {
@@ -20,4 +22,75 @@
   .sidebar {
     width: 100%;
   }
+}
+
+.listItem {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cardContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.cardContainerDanger {
+  background: #fef2f2;
+}
+
+.cardContainer h3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  font-weight: 500;
+}
+
+.cardContainer:hover {
+  background-color: #f3f4f6;
+}
+
+.cardContainer button {
+  background: transparent;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  top: 0;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.content .mag {
+  flex-basis: 36px;
+}
+
+.content .info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem
+}
+
+.content .info .subinfo {
+  font-size: 0.75rem;
+  color: #666;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.danger {
+  color: red;
+  font-weight: 700;
 }

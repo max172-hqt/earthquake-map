@@ -19,6 +19,19 @@
   -moz-osx-font-smoothing: grayscale; */
 }
 
+a, button, h1, h2, h3, h4, h5, h6, input, ol, p, textarea, th, ul {
+  background: transparent;
+  border-radius: 0;
+  border: 0;
+  font: inherit;
+  list-style: none;
+  margin: 0;
+  outline: 0;
+  overflow: visible;
+  padding: 0;
+  vertical-align: baseline;
+}
+
 body {
   margin: 0;
   display: flex;

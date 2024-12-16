@@ -1,5 +1,5 @@
-import { Map, Overlay, View } from "ol";
-import { OSM } from "ol/source";
+import { Map, Overlay, VectorTile, View } from "ol";
+import { OSM, Vector } from "ol/source";
 import TileLayer from "ol/layer/Tile";
 import { useEffect, useRef, useState } from "react";
 import "ol/ol.css";
@@ -13,21 +13,26 @@ import { FeatureLike } from "ol/Feature";
 import { click } from "ol/events/condition.js";
 import { Point } from "ol/geom";
 import InfoPopup from "./InfoPopup";
+import EsriJSON from "ol/format/EsriJSON";
 import { transform } from "ol/proj";
 
 const EARTHQUAKE_VECTOR_LAYER_Z_INDEX = 10;
 
+const serviceUrl =
+  "https://services-eu1.arcgis.com/NPIbx47lsIiu2pqz/ArcGIS/rest/services/" +
+  "Neptune_Coastline_Campaign_Open_Data_Land_Use_2014/FeatureServer/";
+
 const fill = new Fill({
-  color: "orange",
+  color: "#ea580c",
 });
 
 const stroke = new Stroke({
-  color: "black",
+  color: "#666",
   width: 1.25,
 });
 
 const selectedFill = new Fill({
-  color: "red",
+  color: "#9a3412",
 });
 
 const defaultStyle = new Style({
@@ -76,6 +81,12 @@ function MainMap() {
 
     const baseOSM = new OSM();
     const layer = new TileLayer({ source: baseOSM });
+    const tectonicLayer = new VectorLayer({
+      source: new Vector({
+        url: "https://services.arcgis.com/As5CFN3ThbQpy8Ph/arcgis/rest/services/EarthTectonicPlates12/FeatureServer/0/query/?f=json&where=1%3D1",
+        format: new EsriJSON(),
+      }),
+    });
     const view = new View({
       center: [0, 0],
       zoom: 0,
@@ -93,6 +104,7 @@ function MainMap() {
 
     selectInteractionRef.current.on("select", (event) => {
       if (!popupObjectRef.current || !mapRef.current) return;
+      popupObjectRef.current.setPosition(undefined);
 
       const features = event.selected;
 
@@ -102,8 +114,12 @@ function MainMap() {
       }
 
       const feature = features[0];
-
       const properties = feature.getProperties();
+
+      if (properties.type !== 'earthquake') {
+        return;
+      }
+
       setSelectedEarthquake(properties);
 
       const point = feature.getGeometry() as Point;
@@ -118,7 +134,7 @@ function MainMap() {
     });
 
     mapRef.current.setTarget(containerRef.current);
-    mapRef.current.setLayers([layer]);
+    mapRef.current.setLayers([layer, tectonicLayer]);
     mapRef.current.setView(view);
 
     mapRef.current.addInteraction(selectInteractionRef.current);

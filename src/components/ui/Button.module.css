@@ -16,6 +16,9 @@
 .button-default {
   height: 2rem;
   padding: 0.5rem 1rem;
+}
+
+.button-primary {
   background-color: var(--primary-color);
 }
 

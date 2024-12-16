@@ -7,7 +7,7 @@
   border-radius: 0.5rem;
   width: 350px;
   font-size: 0.875rem;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
 .topbar {
@@ -28,9 +28,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 600;
+  font-weight: normal;
   font-size: 0.75rem;
-  color: #777;
+  color: #666;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #d1d5db;
 }
@@ -40,6 +40,7 @@
   margin: 0;
   margin-bottom: -0.25rem;
   padding: 0;
+  font-weight: 600;
 }
 
 .popup p {
@@ -47,6 +48,6 @@
   padding: 0;
 }
 
-.popup span {
+.popup p span {
   font-weight: 700;
 }

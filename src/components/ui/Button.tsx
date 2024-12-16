@@ -10,7 +10,7 @@ export interface ButtonProps
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "default", size = "default", ...props }, ref) => {
+  ({ className, variant = "primary", size = "default", ...props }, ref) => {
     const buttonClasses = classNames(styles.button, className, 
       {
         [styles[`button-${size}`]]: variant !== 'icon',
