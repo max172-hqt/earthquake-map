@@ -1,7 +1,7 @@
-import { Map, Overlay, VectorTile, View } from "ol";
+import { Map, Overlay, View } from "ol";
 import { OSM, Vector } from "ol/source";
 import TileLayer from "ol/layer/Tile";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "ol/ol.css";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
@@ -14,13 +14,11 @@ import { click } from "ol/events/condition.js";
 import { Point } from "ol/geom";
 import InfoPopup from "./InfoPopup";
 import EsriJSON from "ol/format/EsriJSON";
-import { transform } from "ol/proj";
+import { useMapContext } from "../context/MapContext";
 
 const EARTHQUAKE_VECTOR_LAYER_Z_INDEX = 10;
 
-const serviceUrl =
-  "https://services-eu1.arcgis.com/NPIbx47lsIiu2pqz/ArcGIS/rest/services/" +
-  "Neptune_Coastline_Campaign_Open_Data_Land_Use_2014/FeatureServer/";
+const tectonicPlateLayerUrl = "https://services.arcgis.com/As5CFN3ThbQpy8Ph/arcgis/rest/services/EarthTectonicPlates12/FeatureServer/0/query/?f=json&where=1%3D1"
 
 const fill = new Fill({
   color: "#ea580c",
@@ -61,15 +59,12 @@ function selectedStyleFunction(feature: FeatureLike) {
 }
 
 function MainMap() {
-  const mapRef = useRef<Map | null>(null);
+  const { mapRef, selectedEarthquake, setSelectedEarthquake, selectInteractionRef } = useMapContext()
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const [popupPosition, setPopupPosition] = useState<number[] | null>(null);
-  const [selectedEarthquake, setSelectedEarthquake] = useState(null);
   const { earthquakeData } = useEarthquakeContext();
 
   const popupObjectRef = useRef<Overlay | null>(null);
-  const selectInteractionRef = useRef<Select | null>(null);
 
   // Initialize the map
   useEffect(() => {
@@ -83,13 +78,14 @@ function MainMap() {
     const layer = new TileLayer({ source: baseOSM });
     const tectonicLayer = new VectorLayer({
       source: new Vector({
-        url: "https://services.arcgis.com/As5CFN3ThbQpy8Ph/arcgis/rest/services/EarthTectonicPlates12/FeatureServer/0/query/?f=json&where=1%3D1",
+        url: tectonicPlateLayerUrl,
         format: new EsriJSON(),
       }),
     });
     const view = new View({
       center: [0, 0],
       zoom: 0,
+      maxZoom: 13
     });
 
     selectInteractionRef.current = new Select({
@@ -124,13 +120,7 @@ function MainMap() {
 
       const point = feature.getGeometry() as Point;
       const coordinates = point.getCoordinates();
-      setPopupPosition(coordinates);
-
       popupObjectRef.current.setPosition(coordinates);
-      // mapRef.current.getView().animate({
-      //   center: coordinates,
-      //   duration: 200, // Animation duration in milliseconds
-      // });
     });
 
     mapRef.current.setTarget(containerRef.current);
@@ -141,7 +131,7 @@ function MainMap() {
     mapRef.current.addOverlay(popupObjectRef.current);
 
     return () => mapRef.current?.setTarget(undefined);
-  }, []);
+  }, [mapRef, selectInteractionRef, setSelectedEarthquake]);
 
   useEffect(() => {
     if (mapRef.current === null || !earthquakeData) {
@@ -171,7 +161,7 @@ function MainMap() {
 
     earthquakeLayer.setSource(source);
     earthquakeLayer.setStyle(styleFunction);
-  }, [earthquakeData]);
+  }, [earthquakeData, mapRef]);
 
   function closePopup() {
     popupObjectRef.current?.setPosition(undefined);
