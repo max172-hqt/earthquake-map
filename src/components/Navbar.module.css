@@ -1,9 +1,10 @@
 .navbar {
-  background: white;
+  background: #c2410c;
   padding: 1rem 1rem;
   border-bottom: 1px solid #0f172a1a;
   /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); */
   z-index: 1000;
+  color: white;
 
 }
 
@@ -18,4 +19,12 @@
   font-weight: 400;
   margin: 0;
   padding: 0;
+}
+
+.logo button {
+  background: transparent;
+}
+
+.logo button:hover {
+  background: #ea580c;
 }

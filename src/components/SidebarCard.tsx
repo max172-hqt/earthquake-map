@@ -3,9 +3,11 @@ import styles from "./Sidebar.module.css";
 import dayjs from "dayjs";
 import { useMapContext } from "../context/MapContext";
 import VectorSource from "ol/source/Vector";
+import { useMemo, useState } from "react";
 
-function SidebarCard({ item }) {
-  const { selectInteractionRef, mapRef } = useMapContext();
+function SidebarCard({ item, id }) {
+  const { selectInteractionRef, mapRef, selectedEarthquake } = useMapContext();
+  const [hover, setHover] = useState(false);
 
   function handleClick() {
     const mainLayer = mapRef.current
@@ -30,15 +32,27 @@ function SidebarCard({ item }) {
     const extent = feature.getGeometry()?.getExtent();
 
     if (extent) {
-      mapRef.current?.getView().fit(extent, { size: mapRef.current.getSize(), maxZoom: 6 });
+      mapRef.current
+        ?.getView()
+        .fit(extent, { size: mapRef.current.getSize(), maxZoom: 6 });
     }
   }
+
+  const isActive = useMemo(
+    () =>
+      selectedEarthquake && item.properties.title === selectedEarthquake.title,
+    [item.properties.title, selectedEarthquake]
+  );
 
   return (
     <div
       className={classNames(styles.cardContainer, {
         [styles.cardContainerDanger]: item.properties.mag >= 4.5,
+        [styles.cardContainerActive]: isActive,
+        [styles.cardContainerHover]: hover && !isActive,
       })}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
       <button onClick={handleClick}></button>
       <div className={styles.content}>
@@ -47,7 +61,7 @@ function SidebarCard({ item }) {
             [styles.danger]: item.properties.mag >= 4.5,
           })}
         >
-          {item.properties.mag}
+          {item.properties.mag.toFixed(2)}
         </div>
         <div className={styles.info}>
           <h3>{item.properties.title}</h3>

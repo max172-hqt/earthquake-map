@@ -18,7 +18,8 @@ import { useMapContext } from "../context/MapContext";
 
 const EARTHQUAKE_VECTOR_LAYER_Z_INDEX = 10;
 
-const tectonicPlateLayerUrl = "https://services.arcgis.com/As5CFN3ThbQpy8Ph/arcgis/rest/services/EarthTectonicPlates12/FeatureServer/0/query/?f=json&where=1%3D1"
+const tectonicPlateLayerUrl =
+  "https://services.arcgis.com/As5CFN3ThbQpy8Ph/arcgis/rest/services/EarthTectonicPlates12/FeatureServer/0/query/?f=json&where=1%3D1";
 
 const fill = new Fill({
   color: "#ea580c",
@@ -45,7 +46,8 @@ function styleFunction(feature: FeatureLike) {
   const style = defaultStyle.clone();
   const mag = feature.getProperties().mag;
   const circle = style.getImage() as Circle;
-  circle.setRadius(mag * 2);
+  const radius = mag > 0 ? mag * 2 : 1;
+  circle.setRadius(radius);
   return style;
 }
 
@@ -53,13 +55,19 @@ function selectedStyleFunction(feature: FeatureLike) {
   const style = defaultStyle.clone();
   const mag = feature.getProperties().mag;
   const circle = style.getImage() as Circle;
-  circle.setRadius(mag * 2);
+  const radius = mag > 0 ? mag * 2 : 1;
+  circle.setRadius(radius);
   circle.setFill(selectedFill);
   return style;
 }
 
 function MainMap() {
-  const { mapRef, selectedEarthquake, setSelectedEarthquake, selectInteractionRef } = useMapContext()
+  const {
+    mapRef,
+    selectedEarthquake,
+    setSelectedEarthquake,
+    selectInteractionRef,
+  } = useMapContext();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
   const { earthquakeData } = useEarthquakeContext();
@@ -75,22 +83,30 @@ function MainMap() {
     mapRef.current = new Map();
 
     const baseOSM = new OSM();
-    const layer = new TileLayer({ source: baseOSM });
+
+    const baseLayer = new TileLayer({ source: baseOSM });
+
     const tectonicLayer = new VectorLayer({
       source: new Vector({
         url: tectonicPlateLayerUrl,
         format: new EsriJSON(),
       }),
     });
+
+    const earthquakeLayer = new VectorLayer({
+      zIndex: EARTHQUAKE_VECTOR_LAYER_Z_INDEX,
+    });
+    earthquakeLayer.set("id", "main");
+
     const view = new View({
       center: [0, 0],
       zoom: 0,
-      maxZoom: 13
     });
 
     selectInteractionRef.current = new Select({
       condition: click,
       style: selectedStyleFunction,
+      layers: [earthquakeLayer]
     });
 
     popupObjectRef.current = new Overlay({
@@ -106,13 +122,14 @@ function MainMap() {
 
       if (features.length === 0 || !popupRef.current) {
         popupObjectRef.current.setPosition(undefined);
+        setSelectedEarthquake(null);
         return;
       }
 
       const feature = features[0];
       const properties = feature.getProperties();
 
-      if (properties.type !== 'earthquake') {
+      if (properties.type !== "earthquake") {
         return;
       }
 
@@ -124,7 +141,7 @@ function MainMap() {
     });
 
     mapRef.current.setTarget(containerRef.current);
-    mapRef.current.setLayers([layer, tectonicLayer]);
+    mapRef.current.setLayers([baseLayer, tectonicLayer, earthquakeLayer]);
     mapRef.current.setView(view);
 
     mapRef.current.addInteraction(selectInteractionRef.current);
@@ -139,17 +156,12 @@ function MainMap() {
     }
 
     const layers = mapRef.current.getLayers().getArray();
-    let earthquakeLayer = layers.find(
+
+    const earthquakeLayer = layers.find(
       (layer) => layer.get("id") === "main"
     ) as VectorLayer;
 
-    if (!earthquakeLayer) {
-      earthquakeLayer = new VectorLayer({
-        zIndex: EARTHQUAKE_VECTOR_LAYER_Z_INDEX,
-      });
-      earthquakeLayer.set("id", "main");
-      mapRef.current.addLayer(earthquakeLayer);
-    }
+    if (!earthquakeLayer) return
 
     const source = new VectorSource({
       features: new GeoJSON().readFeatures(earthquakeData, {

@@ -16,7 +16,7 @@ function Navbar() {
     <div id="navbar" className={styles.navbar}>
       <div className={styles.logo}>
         <Button variant="icon" onClick={toggleSidebar}>
-          <IconMenu2 color="black" />
+          <IconMenu2 />
         </Button>
         <h1>Earthquake Live</h1>
       </div>

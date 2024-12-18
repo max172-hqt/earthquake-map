@@ -1,6 +1,6 @@
-const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
+const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary"
 
-export const fetchEarthquakeData = async () => {
-  const response = await fetch(url);
+export const fetchEarthquakeData = async (datasetName: string) => {
+  const response = await fetch(`${url}/${datasetName}`);
   return response.json();
 };
