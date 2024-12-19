@@ -1,7 +1,7 @@
 import { Map, Overlay, View } from "ol";
 import { OSM, Vector } from "ol/source";
 import TileLayer from "ol/layer/Tile";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import "ol/ol.css";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
@@ -15,6 +15,7 @@ import { Point } from "ol/geom";
 import InfoPopup from "./InfoPopup";
 import EsriJSON from "ol/format/EsriJSON";
 import { useMapContext } from "../context/MapContext";
+import { transformExtent } from "ol/proj";
 
 const EARTHQUAKE_VECTOR_LAYER_Z_INDEX = 10;
 
@@ -67,12 +68,22 @@ function MainMap() {
     selectedEarthquake,
     setSelectedEarthquake,
     selectInteractionRef,
+    setMapExtent,
   } = useMapContext();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const { earthquakeData } = useEarthquakeContext();
+  const { earthquakeData, showOnMapOnly } = useEarthquakeContext();
 
   const popupObjectRef = useRef<Overlay | null>(null);
+
+  const getMapExtent = useCallback(() => {
+    if (!mapRef.current) return null;
+
+    const extent = mapRef.current
+      .getView()
+      .calculateExtent(mapRef.current.getSize());
+    return transformExtent(extent, "EPSG:3857", "EPSG:4326");
+  }, [mapRef]);
 
   // Initialize the map
   useEffect(() => {
@@ -106,7 +117,7 @@ function MainMap() {
     selectInteractionRef.current = new Select({
       condition: click,
       style: selectedStyleFunction,
-      layers: [earthquakeLayer]
+      layers: [earthquakeLayer],
     });
 
     popupObjectRef.current = new Overlay({
@@ -161,7 +172,7 @@ function MainMap() {
       (layer) => layer.get("id") === "main"
     ) as VectorLayer;
 
-    if (!earthquakeLayer) return
+    if (!earthquakeLayer) return;
 
     const source = new VectorSource({
       features: new GeoJSON().readFeatures(earthquakeData, {
@@ -174,6 +185,24 @@ function MainMap() {
     earthquakeLayer.setSource(source);
     earthquakeLayer.setStyle(styleFunction);
   }, [earthquakeData, mapRef]);
+
+  useEffect(() => {
+    if (mapRef.current === null) {
+      return;
+    }
+
+    function handleMoveEnd() {
+      const extent = getMapExtent();
+      setMapExtent(extent);
+    }
+
+    if (showOnMapOnly) {
+      handleMoveEnd();
+      mapRef.current.on("moveend", handleMoveEnd);
+    } else {
+      mapRef.current.un("moveend", handleMoveEnd);
+    }
+  }, [mapRef, setMapExtent, showOnMapOnly, getMapExtent]);
 
   function closePopup() {
     popupObjectRef.current?.setPosition(undefined);

@@ -61,7 +61,7 @@ function SidebarCard({ item, id }) {
             [styles.danger]: item.properties.mag >= 4.5,
           })}
         >
-          {item.properties.mag.toFixed(2)}
+          {item.properties.mag ? item.properties.mag.toFixed(2) : 'N/A'}
         </div>
         <div className={styles.info}>
           <h3>{item.properties.title}</h3>

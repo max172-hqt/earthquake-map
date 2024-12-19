@@ -10,6 +10,7 @@
   padding-top: 70px;
   display: flex;
   flex-direction: column;
+  font-size: 0.875rem;
 }
 
 .sidebarOpen {
@@ -111,7 +112,7 @@
 
 .select {
   width: 100%;
-  padding: 0.5rem 1rem 0.5rem 0.25rem;
+  padding: 0.25rem 1rem 0.25rem 0.25rem;
   border: 1px solid #CCC;
   border-radius: 8px;
 }
@@ -123,8 +124,28 @@
   gap: 1rem;
 }
 
+.headerSelects {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
 .header label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.header div {
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.checkbox label {
+  display: flex;
+}
+
+.checkbox input {
+  margin-right: 0.25rem;
 }
