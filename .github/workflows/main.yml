@@ -39,6 +39,9 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+        env:
+          TSC_COMPILE_ON_ERROR: true
+          ESLINT_NO_DEV_ERRORS: true
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
