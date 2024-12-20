@@ -7,6 +7,7 @@ export interface EarthquakeContextValue {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sortedData: Record<string, any>;
   isPending: boolean,
+  isLoading: boolean,
   isError: boolean,
   datasetName: string,
   setDatasetName: Dispatch<SetStateAction<string>>
@@ -15,6 +16,7 @@ export interface EarthquakeContextValue {
   showOnMapOnly: boolean,
   setShowOnMapOnly: Dispatch<SetStateAction<boolean>>,
   totalResults: number,
+  refetch: () => void
 }
 
 export const EarthquakeContext = createContext<EarthquakeContextValue | null>(

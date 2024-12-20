@@ -1,12 +1,13 @@
 // import { useEarthquakeContext } from "../context/EarthquakeContext";
 import { useSidebarContext } from "../context/SidebarContext";
 import styles from "./Navbar.module.css";
-import { IconMenu2 } from "@tabler/icons-react";
+import { IconMenu2, IconRefresh } from "@tabler/icons-react";
 import Button from "./ui/Button";
+import { useEarthquakeContext } from "../context/EarthquakeContext";
 
 function Navbar() {
   const { setIsSidebarOpen } = useSidebarContext();
-  // const { isPending } = useEarthquakeContext()
+  const { refetch } = useEarthquakeContext();
 
   function toggleSidebar() {
     setIsSidebarOpen((prev) => !prev);
@@ -16,9 +17,11 @@ function Navbar() {
     <div id="navbar" className={styles.navbar}>
       <div className={styles.logo}>
         <Button variant="icon" onClick={toggleSidebar}>
-          <IconMenu2 />
+          <IconMenu2 color="black" />
         </Button>
-        <h1>Earthquake Live</h1>
+        <Button variant="icon" onClick={refetch}>
+          <IconRefresh color="black" />
+        </Button>
       </div>
     </div>
   );

@@ -3,9 +3,12 @@ import { useSidebarContext } from "../context/SidebarContext";
 import styles from "./Sidebar.module.css";
 import { useEarthquakeContext } from "../context/EarthquakeContext";
 import SidebarCard from "./SidebarCard";
+import Button from "./ui/Button";
+import { IconX } from "@tabler/icons-react";
+import { useState } from "react";
 
 function Sidebar() {
-  const { isSidebarOpen } = useSidebarContext();
+  const { isSidebarOpen, setIsSidebarOpen } = useSidebarContext();
   const {
     setDatasetName,
     datasetName,
@@ -17,6 +20,8 @@ function Sidebar() {
     totalResults,
   } = useEarthquakeContext();
 
+  const [title, setTitle] = useState("1 Day, Magnitude 2.5+");
+
   const cssClasses = classNames(styles.sidebar, {
     [styles.sidebarOpen]: isSidebarOpen,
     [styles.sidebarClose]: !isSidebarOpen,
@@ -24,6 +29,12 @@ function Sidebar() {
 
   return (
     <div id="sidebar" className={cssClasses}>
+      <div className={styles.topNav}>
+        <h1>{title}</h1>
+        <Button variant="icon" onClick={() => setIsSidebarOpen(false)}>
+          <IconX color="black" />
+        </Button>
+      </div>
       <div className={styles.header}>
         <div className={styles.headerSelects}>
           <div>
@@ -33,7 +44,10 @@ function Sidebar() {
               id="dataset"
               className={styles.select}
               value={datasetName}
-              onChange={(e) => setDatasetName(e.target.value)}
+              onChange={(e) => {
+                setDatasetName(e.target.value);
+                setTitle(e.target.options[e.target.selectedIndex].innerHTML)
+              }}
             >
               <option value="2.5_day.geojson">1 Day, Magnitude 2.5+</option>
               <option value="all_day.geojson">1 Day, All Magnitude</option>

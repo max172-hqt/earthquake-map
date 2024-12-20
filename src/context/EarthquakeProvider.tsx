@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, type PropsWithChildren } from "react";
 import { fetchEarthquakeData } from "../api/earthquake-data";
 import { EarthquakeContext } from "./EarthquakeContext";
 import _ from "lodash";
-import { containsCoordinate, Extent } from "ol/extent";
+import { containsCoordinate } from "ol/extent";
 import { useMapContext } from "./MapContext";
 
 const EarthquakeProvider: React.FC<PropsWithChildren> = ({ children }) => {
@@ -16,7 +16,7 @@ const EarthquakeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sortedData, setSortedData] = useState<any>([]);
 
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending, isError, refetch, isLoading } = useQuery({
     queryKey: ["earthquakes", datasetName],
     queryFn: () => fetchEarthquakeData(datasetName),
   });
@@ -52,6 +52,7 @@ const EarthquakeProvider: React.FC<PropsWithChildren> = ({ children }) => {
       value={{
         earthquakeData: data,
         isPending,
+        isLoading,
         isError,
         datasetName,
         setDatasetName,
@@ -61,6 +62,7 @@ const EarthquakeProvider: React.FC<PropsWithChildren> = ({ children }) => {
         showOnMapOnly,
         setShowOnMapOnly,
         totalResults,
+        refetch,
       }}
     >
       {children}
