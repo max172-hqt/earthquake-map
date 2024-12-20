@@ -9,6 +9,7 @@ const MapProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [mapExtent, setMapExtent] = useState<Extent | null>(null);
 
   const [selectedEarthquake, setSelectedEarthquake] = useState<{
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   } | null>(null);
 

@@ -5,7 +5,9 @@ import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 export interface MapContextValue {
   mapRef: React.MutableRefObject<Map | null>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectedEarthquake: {[key: string]: any} | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSelectedEarthquake: Dispatch<SetStateAction<{[key: string]: any} | null>>
   selectInteractionRef: React.MutableRefObject<Select | null>;
   mapExtent: Extent | null,

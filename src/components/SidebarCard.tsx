@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from "classnames";
 import styles from "./Sidebar.module.css";
 import dayjs from "dayjs";
@@ -5,7 +6,7 @@ import { useMapContext } from "../context/MapContext";
 import VectorSource from "ol/source/Vector";
 import { useMemo, useState } from "react";
 
-function SidebarCard({ item, id }) {
+function SidebarCard({ item }: { item: any, id: any}) {
   const { selectInteractionRef, mapRef, selectedEarthquake } = useMapContext();
   const [hover, setHover] = useState(false);
 

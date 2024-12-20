@@ -96,7 +96,9 @@ function Sidebar() {
         </div>
       </div>
       <div className={styles.listItem}>
-        {sortedData.map((item) => (
+        {sortedData.map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (item: any) => (
           <SidebarCard item={item} key={item.id} id={item.id} />
         ))}
       </div>
