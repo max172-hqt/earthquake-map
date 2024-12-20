@@ -5,8 +5,8 @@ import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 export interface MapContextValue {
   mapRef: React.MutableRefObject<Map | null>;
-  selectedEarthquake: {[key: string]: never} | null;
-  setSelectedEarthquake: Dispatch<SetStateAction<{[key: string]: never} | null>>
+  selectedEarthquake: {[key: string]: any} | null;
+  setSelectedEarthquake: Dispatch<SetStateAction<{[key: string]: any} | null>>
   selectInteractionRef: React.MutableRefObject<Select | null>;
   mapExtent: Extent | null,
   setMapExtent: Dispatch<SetStateAction<Extent | null>>

@@ -9,7 +9,7 @@ const MapProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [mapExtent, setMapExtent] = useState<Extent | null>(null);
 
   const [selectedEarthquake, setSelectedEarthquake] = useState<{
-    [key: string]: never;
+    [key: string]: any;
   } | null>(null);
 
   const selectInteractionRef = useRef<Select | null>(null);
